@@ -1,0 +1,11 @@
+--show all details of customers find total orders for each customer --
+
+select
+*,
+
+(select 
+count(*) 
+from orders as o
+where o.customerid = c.id ) as totalorders
+
+from customers as c
