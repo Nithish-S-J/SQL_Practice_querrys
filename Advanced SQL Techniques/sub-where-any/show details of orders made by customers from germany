@@ -1,0 +1,9 @@
+-- show details of orders made by customers from germany --
+
+select 
+*
+from orders
+where customerid in (select 
+                     id
+                     from customers 
+                     where country != 'Germany') 
