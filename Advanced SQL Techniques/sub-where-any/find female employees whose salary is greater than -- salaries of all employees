@@ -1,0 +1,14 @@
+-- find female employees whose salary is greater than
+-- salaries of all employees--
+
+select 
+employeeid,
+concat(firstname,' ',lastname) as fullname,
+salary
+from employees
+where gender = 'F'
+and salary > any
+             (select
+               salary
+                from employees
+                  where gender = 'M')
