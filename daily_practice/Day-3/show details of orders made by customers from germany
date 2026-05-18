@@ -1,0 +1,16 @@
+-- show details of orders made by customers from germany --
+
+select
+*
+from
+(
+select 
+*
+from orders as o
+left join customers as c
+on o.customerid = c.id
+)t
+where country = 'Germany'
+
+
+
