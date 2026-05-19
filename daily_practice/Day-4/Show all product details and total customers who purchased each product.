@@ -1,0 +1,13 @@
+-- Show all product details and total customers who purchased each product. --
+
+select 
+* 
+from 
+(
+select 
+productid,
+count(customerid) as totalcustomers
+from orders
+group by productid) as o
+left join products as p
+on o.productid = p.productid
