@@ -1,0 +1,20 @@
+--Find customers who purchased more unique products than the average unique products purchased by customers --
+
+with customers_products as
+(
+        select 
+        customerid,
+        count(distinct productid) as unique_products
+        from orders
+        group by customerid
+)
+        select 
+        *
+        from
+(
+       select 
+       *, 
+       avg(unique_products)over() as avguniquproducts
+       from customers_products
+)t
+     where unique_products > avguniquproducts
