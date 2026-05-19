@@ -1,0 +1,24 @@
+--Find sales representatives who handled more distinct customers
+--than the average distinct customers handled by sales reps.--
+
+with sales_reps as 
+(        select 
+         salespersonid,
+         count(distinct customerid) as unique_customershandled
+         from orders
+         group by salespersonid
+)
+         select 
+         * 
+         from 
+(        select
+          *,
+        avg(unique_customershandled)over() as avgunique_customershandled
+        from sales_reps
+)t
+   
+where unique_customershandled > avgunique_customershandled
+
+
+
+
