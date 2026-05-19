@@ -1,0 +1,14 @@
+-- Find employees whose salary is higher than the average salary of their department.---
+
+
+select 
+*
+from
+(
+select 
+employeeid,
+department,
+salary,
+avg(salary) over (partition by department) as avgsalary
+from employees) as e
+where salary > avgsalary
