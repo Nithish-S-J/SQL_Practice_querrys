@@ -1,0 +1,21 @@
+---Find products that were purchased by more unique customers than the average unique customer count per product. --
+
+with customers_products as 
+
+( 
+select 
+productid,
+count(distinct customerid) as unique_customers
+from orders
+group by productid
+)
+select
+*
+from
+( 
+select 
+*, 
+avg(unique_customers) over () as avguniquecustomers 
+from customers_products
+)t
+where unique_customers > avguniquecustomers 
