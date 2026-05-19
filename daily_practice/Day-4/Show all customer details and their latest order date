@@ -1,0 +1,14 @@
+--Show all customer details and their latest order date.---
+
+select 
+*
+from
+(
+select 
+customerid,
+max(orderdate) as latestorderdate
+from orders
+group by customerid) as o
+
+left join customers as c
+on o.customerid = c.id
