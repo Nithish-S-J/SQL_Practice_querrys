@@ -1,0 +1,17 @@
+-- Show all product details and average sales amount per order for each product.--
+
+select 
+p.*,
+o.avgsales
+from 
+
+(
+select
+productid,
+avg(sales) as avgsales
+from orders
+group by productid) as o
+
+left join products as p
+
+on  p.productid = o.productid 
