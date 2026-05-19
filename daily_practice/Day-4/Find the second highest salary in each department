@@ -1,0 +1,12 @@
+---Find the second highest salary in each department---
+select
+*
+from
+(
+SELECT
+    department,
+    firstname,
+    salary,
+    DENSE_RANK() OVER ( PARTITION BY department ORDER BY salary DESC) AS rn
+FROM employees )t
+where rn = 2
