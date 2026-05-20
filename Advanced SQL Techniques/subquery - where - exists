@@ -1,0 +1,10 @@
+-- show the details of orders made by customers in germany --- 
+
+select
+* 
+from orders as o
+where exists(  select 
+                * 
+               from customers as c
+               where country = 'Germany' 
+               and   o.customerid = c.id )
