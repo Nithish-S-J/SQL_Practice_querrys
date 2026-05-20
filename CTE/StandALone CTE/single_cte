@@ -1,0 +1,23 @@
+--#1 find the total sales per customer --
+
+with CTE_total_sales as
+(
+select 
+     customerid,
+     sum(sales) as totalsales,
+     avg(sum(sales)) over() as avgtotalsales
+     from orders
+group by customerid
+)
+
+--main_query--
+
+select 
+      id,
+      concat(c.firstname,' ', c.lastname) as customername,
+      cts.totalsales,
+      cts.avgtotalsales
+from customers as c
+left join CTE_total_sales as cts
+on cts.customerid = c.id 
+
