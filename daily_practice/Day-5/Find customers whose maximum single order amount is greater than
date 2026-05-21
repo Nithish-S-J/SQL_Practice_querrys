@@ -1,0 +1,19 @@
+---Find customers whose maximum single order amount is greater than 
+--the average maximum order amount across all customers.
+
+with cte1 as
+(
+select 
+customerid,
+max(sales) as maxoderamount
+from orders
+group by customerid
+)
+select * from 
+(
+select 
+*,
+avg(maxoderamount) over () as avgorderamount
+from cte1)t
+
+where maxoderamount > avgorderamount
