@@ -1,0 +1,59 @@
+--------------------------------------Step - 1 find the total sales per customer -----------------------------------
+
+with CTE_total_sales as
+(
+select 
+     customerid,
+     sum(sales) as totalsales,
+     avg(sum(sales)) over() as avgtotalsales
+     from orders
+group by customerid
+)
+
+-------------------------------------step - 2 find the last orderdate for each customer------------------------------
+
+, cte_last_order as
+(select customerid,
+        max(orderdate) as lastorder 
+        from orders
+        group by customerid)
+
+----------------------------------Step - 3 rank customers based on total sales per customer (nested cte 1)--------------------------
+,cte_customer_rank as 
+( select 
+customerid,
+totalsales,
+rank()over(order by totalsales desc) as customerank
+from CTE_total_sales
+) 
+
+------------------------------step-4 segment customers based on there totalsales (nested cte 2)--------------------------------
+
+, cte_customer_segment as 
+(select customerid,
+        case when totalsales > 100 then 'high'
+             when totalsales < 100 then 'medium'
+             else 'low' 
+             end as customer_segment
+        from CTE_total_sales)
+
+
+-------------------------------main_query------------------------------------------------------------------
+
+select 
+      id,
+      concat(c.firstname,' ', c.lastname) as customername,
+      cts.totalsales,
+      cts.avgtotalsales,
+      clo.lastorder,
+      ccr.customerank,
+      ccs.customer_segment
+     from customers as c
+left join CTE_total_sales as cts
+on cts.customerid = c.id
+left join cte_last_order as clo
+on clo.customerid = c.id 
+left join cte_customer_rank as ccr
+on ccr.customerid = c.id
+left join cte_customer_segment as ccs
+on ccs.customerid = c.id
