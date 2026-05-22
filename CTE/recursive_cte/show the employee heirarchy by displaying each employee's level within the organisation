@@ -1,0 +1,25 @@
+-- show the employee heirarchy by displaying each employee's level within the organisation---
+
+with cte_emp_hierarchy as
+(
+---anchor querry--- 
+select 
+      firstname,
+      employeeid,
+      managerid,
+      1 as Level
+      from employees
+      where managerid is null
+
+      union all
+      --- recursive querry ----
+      select 
+      e.firstname,
+      e.employeeid,
+      e.managerid,
+      Level +1
+      from employees as e
+      inner join cte_emp_hierarchy as ceh
+      on e.managerid = ceh.employeeid
+)
+select * from cte_emp_hierarchy
