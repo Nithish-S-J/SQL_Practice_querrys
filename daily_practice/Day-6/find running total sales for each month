@@ -1,11 +1,13 @@
---------------- find running total sales for each month -------------
+----------------- find running total sales for each month ---------------
 
 with cte_monthly_sales as
 
 (
 select 
 datetrunc(month,order_date) as ordermonth,
-sum(sales_amount) as totalsales
+sum(sales_amount) as totalsales,
+count(order_number) as totalorder,
+sum(quantity) as totalquantity
 from gold.fact_sales
 group by datetrunc(month,order_date)
 )
@@ -13,6 +15,8 @@ group by datetrunc(month,order_date)
 select 
 ordermonth,
 totalsales,
+totalorder,
 sum(totalsales)over(order by ordermonth) as runningsales
 from cte_monthly_sales
 where ordermonth is not null
+
