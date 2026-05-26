@@ -1,0 +1,33 @@
+-- Find employees whose average handled order value is higher
+--than the average employee order value within their department.
+  
+with cte as
+  
+(
+select 
+avg(sales) as avgordervalue,
+salespersonid,
+department
+from orders as o
+inner join employees as e
+on o.salespersonid = e.employeeid
+group by salespersonid, department
+)
+  
+select
+  * 
+  from
+  
+(
+select salespersonid,
+       department,
+       avgordervalue,
+       avg(avgordervalue)over(partition by department) as department_dervalue
+       from cte
+)t
+  
+  where avgordervalue > department_dervalue
+
+
+
+
