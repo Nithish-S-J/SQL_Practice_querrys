@@ -1,0 +1,19 @@
+---Find departments where the employee with the highest salary earns less than 
+--the company-wide average of department maximum salaries.
+  
+with cte1 as
+(
+select 
+department,
+max(salary) as maxsalary
+from employees
+group by department
+)
+select * from 
+(
+ select department,
+        maxsalary,
+        avg(maxsalary)over() as avgmaxsalary
+        from cte1)t
+        where maxsalary < avgmaxsalary
+    
