@@ -1,0 +1,24 @@
+--Find customers who placed orders in more months than 
+--the average active months of customers from the same region.
+
+
+with cte as
+(
+select o.customerid,
+       c.country,
+       count(distinct month (o.orderdate)) as maxmonthorder
+       from orders as o       
+       left join [sales.customers] as c
+       on o.customerid = c.id
+       group by o.customerid,c.country
+       )
+       select * from 
+       (
+       select *,
+              avg(maxmonthorder)over(partition by country) as avgmaxmonth
+              from cte)t
+              where  maxmonthorder > avgmaxmonth
+
+
+
+  
