@@ -1,0 +1,33 @@
+--Find regions where the customer with the maximum number of orders has fewer orders than the 
+--average of the highest customer order counts across all regions.
+
+with cte as 
+(
+select o.customerid,
+       c.country,
+       count(o.orderid) as total_orders
+       from orders as o
+       left join [sales.customers] as c
+       on o.customerid = c.id
+       group by o.customerid,c.country
+       ) 
+       ,cte1 as 
+             (
+             select 
+             country,
+             max(total_orders) as max_orders
+             from cte
+             group by country
+             )
+
+             select 
+             *
+             from
+             (
+               select 
+                      *,
+                      avg(max_orders) over () as avg_maxorders
+                      from cte1
+                      )t
+
+              where max_orders < avg_maxorders
