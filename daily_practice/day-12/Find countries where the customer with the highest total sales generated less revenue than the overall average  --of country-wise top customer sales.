@@ -1,0 +1,40 @@
+--Find countries where the customer with the highest total sales generated less revenue than the overall average 
+--of country-wise top customer sales.
+
+--customer totalsales per country
+  
+with cte1 as
+(
+select c.country,
+       o.customerid,  
+       sum(o.sales) as totalsales
+       from orders as o
+       left join [sales.customers] as c
+       on o.customerid = c.id
+       group by c.country,o.customerid)
+
+--Top Customer Sales per Country
+  
+  , cte2 as 
+  (
+  select 
+         country,
+         max(totalsales) as highestsales
+         from cte1
+         group by country
+    )
+         
+         select * from
+         (           
+         select *,
+                avg(highestsales)over() as avgsales
+                from cte2
+          )t
+
+                where highestsales < avgsales
+
+
+         
+
+
+
