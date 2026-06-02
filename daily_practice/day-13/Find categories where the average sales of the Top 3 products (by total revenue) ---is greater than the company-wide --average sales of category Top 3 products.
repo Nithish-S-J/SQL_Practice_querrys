@@ -1,0 +1,35 @@
+---Find categories where the average sales of the Top 3 products (by total revenue)
+---is greater than the company-wide --average sales of category Top 3 products.
+
+WITH cte1 AS
+(
+    SELECT
+        p.category,
+        o.productid,
+        SUM(o.sales) AS totalsales,
+        ROW_NUMBER() OVER ( PARTITION BY p.category ORDER BY SUM(o.sales) DESC ) AS rn
+    FROM orders o
+    JOIN products p
+        ON o.productid = p.productid
+    GROUP BY p.category, o.productid
+),
+
+cte2 AS
+(
+    SELECT
+        category,
+        AVG(totalsales) AS avg_top3_sales
+    FROM cte1
+    WHERE rn <= 3
+    GROUP BY category
+)
+
+SELECT *
+FROM
+(
+    SELECT
+        *,
+        AVG(avg_top3_sales) OVER() AS company_avg_top3_sales
+    FROM cte2
+) t
+WHERE avg_top3_sales > company_avg_top3_sales;
