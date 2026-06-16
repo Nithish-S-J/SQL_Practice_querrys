@@ -26,7 +26,7 @@ select
                       group by category)
 
                       select *,
-                             round(100.0*top10sales/avgproducts,2) as pctsales
+                             round(100.0*top10sales/avgproducts,2) as sales_multiple
                              from cte2 as c2
                              join cte3 as c3
                              on c2.category = c3.category
