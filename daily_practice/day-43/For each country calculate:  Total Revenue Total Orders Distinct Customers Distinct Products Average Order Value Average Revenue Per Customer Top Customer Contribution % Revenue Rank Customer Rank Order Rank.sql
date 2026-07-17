@@ -12,9 +12,7 @@ Customer Rank
 Order Rank
 
 Finally calculate:
-
 Executive Score
-
 =
 Revenue Rank
 +
@@ -132,4 +130,4 @@ select
 
 from cte3
 
-order by executive_score;
+order by executive_score 
