@@ -44,6 +44,7 @@ select
                         min(sales_month) as first_purchase_month,
                         max(sales_month) as last_purchase_month,
                         count(*) as active_months,
+                        sum(monthly_revenue) as total_revenue,
                         avg(monthly_revenue) as avg_monthly_revenue
                         from cte1
                         group by customer_id,
