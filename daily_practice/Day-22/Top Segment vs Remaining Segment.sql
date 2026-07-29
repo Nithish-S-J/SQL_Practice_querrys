@@ -1,6 +1,6 @@
 --Find categories where the Top Quartile (Top 25%) products 
 ---contribute more sales than the Bottom 75% products combined.
-
+create view as 
 with cte1 as
 (
 select dp.category,
