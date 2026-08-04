@@ -16,7 +16,7 @@ days_to_second_purchase */
 
 with cte1 as
 (
-select 
+select distinct
       dc.customer_id,
       concat(dc.first_name , ' ' , dc.last_name) as customer_name,
       dc.country,
